@@ -110,4 +110,41 @@
             </div>
         </div>
     </div>
+    <div class="btt-button shadow-sm rounded-0 border border-black">
+        <a class="btt-link d-flex h-100">
+            <i class="fas fa-arrow-up text-black mx-auto my-auto"></i>
+        </a>
+    </div>
 {% endblock %}
+
+{% block postloadjs %}
+    {{ block.super }} {% comment %} will ensure we append rather than replace the block {% endcomment %}
+    <script type="text/javascript">
+        $('.btt-link').click(function() {
+            window.scrollTo(0, 0);
+        });
+    </script>
+
+    <script type="text/javascript">
+        $('#sort-selector').change(function() {
+            var selector = $(this); // this will get the value of the selected option
+            var currentUrl = new URL(window.location); // this will get the current url
+            var selectedVal = selector.val(); // this will get the value of the selected option
+
+            if (selectedVal != "reset") {
+                var sort = selectedVal.split("_")[0]; // this will split the value of the selected option at the underscore and return the first value
+                var direction = selectedVal.split("_")[1]; // this will split the value of the selected option at the underscore and return the second value
+
+                currentUrl.searchParams.set("sort", sort); //searchParams is a built in method of the URL class to replace the query string
+                currentUrl.searchParams.set("direction", direction); // this is the same as doing ?sort=price&direction=asc
+
+                window.location.replace(currentUrl); // this will redirect the user to the new url
+            } else {
+                currentUrl.searchParams.delete("sort"); 
+                currentUrl.searchParams.delete("direction");// if the user selects the reset option, this will remove the sort and direction query strings from the url
+
+                window.location.replace(currentUrl);
+            }
+        });
+    </script>
+{% endblock  %}
