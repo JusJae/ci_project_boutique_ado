@@ -11,8 +11,22 @@ def all_products(request):
     products = Product.objects.all()
     query = None  # to prevent error if no search term is entered
     categories = None
+    sort = None  # to prevent error if no search term is entered
+    direction = None
 
     if request.GET:
+        if 'sort' in request.GET:
+            sortkey = request.GET['sort'] # this is the name of the field we want to sort on
+            sort = sortkey # this is used to keep the sort term in the search box after the search is performed
+            if sortkey == 'name':
+                sortkey = 'lower_name'
+                products = products.annotate(lower_name=Lower('name')) # annotate current list of products with a new field called lower_name which is the name field converted to lower case
+            if 'direction' in request.GET:
+                direction = request.GET['direction']
+                if direction == 'desc':
+                    sortkey = f'-{sortkey}' # the - in front of the sortkey reverses the order of the sort
+            products = products.order_by(sortkey) # sort the products by the sortkey
+                    
         if 'category' in request.GET:
             categories = request.GET['category'].split(',')
             products = products.filter(category__name__in=categories) # __in is a Django field lookup that allows us to check if a given item is in a list
@@ -30,12 +44,15 @@ def all_products(request):
                 description__icontains=query)
             # filter the products queryset to match the queries
             products = products.filter(queries)
+            
+    current_sorting = f'{sort}_{direction}' 
 
     context = {
         'products': products,
         # this is used to keep the search term in the search box after the search is performed
         'search_term': query,
         'current_categories': categories, # this is used to display the category name in the search box after the search is performed
+        'current_sorting': current_sorting,
     }
 
     return render(request, 'products/products.html', context)
