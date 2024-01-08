@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.contrib import messages
 from django.db.models import Q
+from django.db.models.functions import Lower
 from .models import Product, Category
 
 # Create your views here.
@@ -11,7 +12,7 @@ def all_products(request):
     products = Product.objects.all()
     query = None  # to prevent error if no search term is entered
     categories = None
-    sort = None  # to prevent error if no search term is entered
+    sort = None
     direction = None
 
     if request.GET:
@@ -21,12 +22,15 @@ def all_products(request):
             if sortkey == 'name':
                 sortkey = 'lower_name'
                 products = products.annotate(lower_name=Lower('name')) # annotate current list of products with a new field called lower_name which is the name field converted to lower case
+            if sortkey == 'category':
+                    sortkey = 'category__name'
             if 'direction' in request.GET:
                 direction = request.GET['direction']
                 if direction == 'desc':
                     sortkey = f'-{sortkey}' # the - in front of the sortkey reverses the order of the sort
+
             products = products.order_by(sortkey) # sort the products by the sortkey
-                    
+
         if 'category' in request.GET:
             categories = request.GET['category'].split(',')
             products = products.filter(category__name__in=categories) # __in is a Django field lookup that allows us to check if a given item is in a list
