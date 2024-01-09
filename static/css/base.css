@@ -19,6 +19,8 @@ body {
     width: 1.5rem;
 }
 
+
+
 .logo-font {
     text-transform: uppercase;
 }
@@ -128,6 +130,11 @@ a.category-badge > span.badge:hover {
 @media (max-width: 991px) {
     .header-container {
         padding-top: 116px;
+        padding-bottom: 20px;
+    }
+    
+    .navbar .nav-link {
+        padding: .5rem !important;
     }
 
     body {
