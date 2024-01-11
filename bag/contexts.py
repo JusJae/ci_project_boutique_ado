@@ -28,9 +28,9 @@ def bag_contents(request): # This function is available to all templates
                 product_count += quantity
                 bag_items.append({  # This is a list of dictionaries
                 'item_id': item_id,
-                'quantity': item_data,
+                'quantity': quantity,
                 'product': product,
-                    'size': size,
+                'size': size,
                 })
     
     if total < settings.FREE_DELIVERY_THRESHOLD:
