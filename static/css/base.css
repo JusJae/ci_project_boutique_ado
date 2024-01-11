@@ -98,10 +98,24 @@ a.category-badge > span.badge:hover {
     right: 10px;
 }
 
+
 .btt-link {
     cursor: pointer;
 }
 
+.input-group {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.qty-input-width {
+    width: auto;
+}
+
+.table th,
+.table td {
+    width: auto;
+}
 
 /* --------------------------------- Media queries */
 
