@@ -117,13 +117,13 @@
             {% for message in messages %}
                 {% with message.level as level %}
                     {% if level == 40 %} {% comment %} 40 is the level for error messages {% endcomment %}
-                        {% include 'includes/toast.html' %}
+                        {% include 'includes/toasts/toast_error.html' %}
                     {% elif level == 30 %} {% comment %} 30 is the level for warning messages {% endcomment %}
-                        {% include 'includes/toast.html' %}
+                        {% include 'includes/toasts/toast_warning.html' %}
                     {% elif level == 25 %} {% comment %} 25 is the level for success messages {% endcomment %}
-                        {% include 'includes/toast.html' %}
+                        {% include 'includes/toasts/toast_success.html' %}
                     {% else %} {% comment %} default for everything else {% endcomment %}
-                        {% include 'includes/toast.html' %}
+                        {% include 'includes/toasts/toast_info.html' %}
                     {% endif %}
                 {% endwith %}
             {% endfor %}
