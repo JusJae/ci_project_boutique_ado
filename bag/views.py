@@ -1,14 +1,15 @@
-from django.shortcuts import render, redirect, reverse, HttpResponse, get_object_or_404
+from django.shortcuts import (
+    render, redirect, reverse, HttpResponse, get_object_or_404)
 from django.contrib import messages
 
 from products.models import Product
 
-# Create your views here.
 
 def view_bag(request):
     """ A view that displays the shopping bag contents page """
 
     return render(request, 'bag/bag.html')
+
 
 def add_to_bag(request, item_id):
     """ Add a quantity of the specified product to the shopping bag """
@@ -19,7 +20,8 @@ def add_to_bag(request, item_id):
     size = None
     if 'product_size' in request.POST:
         size = request.POST['product_size']
-    # Gets the bag variable from the session, or create a new one in an empty dict if it doesn't exist
+    # Gets the bag variable from the session, or create a new one in an
+        # empty dict if it doesn't exist
     bag = request.session.get('bag', {})
 
     if size:
@@ -28,8 +30,11 @@ def add_to_bag(request, item_id):
             # If the size is already in the bag, update the quantity
             if size in bag[item_id]['items_by_size'].keys():
                 bag[item_id]['items_by_size'][size] += quantity
-                messages.success(request, f'Updated size {size.upper()} {
-                    product.name} quantity to {bag[item_id]["items_by_size"][size]}')
+                messages.success(
+                    request,
+                    f'Updated size {size.upper()} {product.name} quantity to '
+                    f'{bag[item_id]["items_by_size"][size]}'
+                )
             # Otherwise, add the size to the bag
             else:
                 bag[item_id]['items_by_size'][size] = quantity
@@ -70,8 +75,10 @@ def adjust_bag(request, item_id):
         # If the quantity is greater than 0, update the quantity
         if quantity > 0:
             bag[item_id]['items_by_size'][size] = quantity
-            messages.success(request, f'Updated size {size.upper()} {
-                product.name} quantity to {bag[item_id]["items_by_size"][size]}')
+            messages.success(
+                request,
+                f'Updated size {size.upper()} {product.name} quantity to '
+                f'{bag[item_id]["items_by_size"][size]}')
         # Otherwise, remove the item from the bag
         else:
             del bag[item_id]['items_by_size'][size]
