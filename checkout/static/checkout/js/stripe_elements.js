@@ -61,6 +61,8 @@ form.addEventListener("submit", function (ev) {
 	ev.preventDefault(); // Prevent the form from submitting
 	card.update({ disabled: true });
 	$("#submit-button").attr("disabled", true); // Disable the card element and submit button to prevent multiple submissions
+	$("#payment-form").fadeToggle(100); // Fade out the form
+	$("#loading-overlay").fadeToggle(100); // Fade in the loading overlay
 	stripe
 		.confirmCardPayment(clientSecret, {
 			payment_method: {
@@ -77,7 +79,9 @@ form.addEventListener("submit", function (ev) {
                 </span>
                 <span>${result.error.message}</span>`;
 				$(errorDiv).html(html);
-				// Re-enable the card Element and submit button if therr is an error to allow the user to fix it
+				$("#payment-form").fadeToggle(100); // Re-show the form
+				$("#loading-overlay").fadeToggle(100); // Hide the loading overlay
+				// Re-enable the card Element and submit button if there is an error to allow the user to fix it
 				card.update({ disabled: false });
 				$("#submit-button").attr("disabled", false);
 			} else {
