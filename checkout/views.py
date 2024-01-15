@@ -128,7 +128,7 @@ def checkout_success(request, order_number):
     """ A view to handle successful checkouts """
 
     # we get the save info from the session
-    save_info = request.session.get('save_info')
+    save_info = request.session.get('save_info') # noqa
     # we get the order from the previous view
     order = get_object_or_404(Order, order_number=order_number)
     # will need to add in code that has been copied for user profile info
