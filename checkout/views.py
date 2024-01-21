@@ -1,4 +1,6 @@
-from django.shortcuts import render, redirect, reverse, get_object_or_404
+from django.shortcuts import (
+    render, redirect, reverse, get_object_or_404, HttpResponse)
+from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.conf import settings
 
@@ -10,6 +12,36 @@ from bag.contexts import bag_contents
 # returns a dictionary of the bag contents
 
 import stripe
+import json
+
+
+@require_POST
+def cache_checkout_data(request):
+    """ A view to cache the checkout data """
+    try:
+        print("save_info received:", request.POST.get('save_info'))
+        # we get the payment intent id from the post data
+        pid = request.POST.get('client_secret').split('_secret')[0]
+        # we set the stripe api key
+        stripe.api_key = settings.STRIPE_SECRET_KEY
+        # we update the payment intent with the form data
+        stripe.PaymentIntent.modify(pid, metadata={
+            'bag': json.dumps(request.session.get('bag', {})),
+            # we add the bag to the metadata in a json format
+            'save_info': request.POST.get('save_info'),
+            # we add the save info to the metadata
+            'username': request.user,
+            # we add the username to the metadata
+        })
+        return HttpResponse(status=200)
+    except Exception as e:
+        # if there is an error, we display a message to the user
+        messages.error(request, 'Sorry, your payment cannot be processed \
+                    right now. Please try again later.')
+        # we print the error message
+        print(str(e))
+        # we return a HTTP response with a 400 error
+        return HttpResponse(content=str(e), status=400)
 
 
 def checkout(request):
@@ -46,7 +78,16 @@ def checkout(request):
         # validated and saved
         if order_form.is_valid():
             # if the form is valid, we save the order
-            order = order_form.save()
+            # we add commit=False to prevent multiple saves on db
+            order = order_form.save(commit=False)
+            # we get the payment intent id from the post data
+            pid = request.POST.get('client_secret').split('_secret')[0]
+            # we set the order stripe pid to the payment intent id
+            order.stripe_pid = pid
+            # we set the original bag to the bag in the session
+            order.original_bag = json.dumps(bag)
+            # we save the order
+            order.save()
             # we loop through the bag items and create an order line item
             # for each one
             for item_id, item_data in bag.items():
