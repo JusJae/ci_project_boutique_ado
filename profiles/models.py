@@ -7,7 +7,7 @@ from django_countries.fields import CountryField
 
 
 class UserProfile(models.Model):
-    """ 
+    """
     A user profile model for maintaining default
     delivery information and order history
     """
@@ -27,7 +27,7 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.user.username
-    
+
 
 @receiver(post_save, sender=User)
 def create_orupdate_user_profile(sender, instance, created, **kwargs):
