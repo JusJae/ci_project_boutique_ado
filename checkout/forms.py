@@ -29,7 +29,6 @@ class OrderForm(forms.ModelForm):
             'town_or_city': 'Town or City',
             'postcode': 'Postcode',
             'county': 'County, State or Locality',
-            'country': 'Country',
         }
         # The placeholders dictionary is used to set the
         # placeholder attribute on the form fields.
@@ -42,16 +41,21 @@ class OrderForm(forms.ModelForm):
         # The code below loops through the form fields and
         # sets a class attribute on each one.
         for field in self.fields:
-            if self.fields[field].required:
-                # The required attribute is used to indicate
-                # whether the field is required or not.
-                # If the field is required, an asterisk is
-                # added to the placeholder.
-                placeholder = f'{placeholders[field]} *'
-            else:
-                placeholder = placeholders[field]
-            # The placeholder is then set on the field.
-            self.fields[field].widget.attrs['placeholder'] = placeholder
+            if field != 'country':
+                # The country field is excluded from the loop
+                # because it doesn't need a placeholder.
+                # The field is then checked to see if it is
+                # required or not.
+                if self.fields[field].required:
+                    # The required attribute is used to indicate
+                    # whether the field is required or not.
+                    # If the field is required, an asterisk is
+                    # added to the placeholder.
+                    placeholder = f'{placeholders[field]} *'
+                else:
+                    placeholder = placeholders[field]
+                # The placeholder is then set on the field.
+                self.fields[field].widget.attrs['placeholder'] = placeholder
             # The classes are set on the field.
             self.fields[field].widget.attrs['class'] = 'stripe-style-input'
             # The label is set to False to remove the
