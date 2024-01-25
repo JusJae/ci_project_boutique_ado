@@ -1,4 +1,5 @@
 from django import forms
+from .widgets import CustomClearableFileInput
 from .models import Product, Category
 
 
@@ -7,6 +8,10 @@ class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
         fields = '__all__'  # includes all fields from the model
+
+    # replace theiimage field on the form with the one we created in widgets.py
+    image = forms.ImageField(label='Image',
+                             required=False, widget=CustomClearableFileInput)
 
     def __init__(self, *args, **kwargs):
         """ Add placeholders and classes to form inputs """
