@@ -38,8 +38,7 @@ def cache_checkout_data(request):
         return HttpResponse(status=200)
     except Exception as e:
         # if there is an error, we display a message to the user
-        messages.error(request, 'Sorry, your payment cannot be processed \
-                       right now. Please try again later.')
+        messages.error(request, 'Sorry, your payment cannot be processed right now. Please try again later.')  # noqa
         # we return a HTTP response with a 400 error
         return HttpResponse(content=str(e), status=400)
 
