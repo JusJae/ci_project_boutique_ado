@@ -13,4 +13,4 @@ class MediaStorage(S3Boto3Storage):
     """
     This class will be used to store media files on AWS
     """
-    location = settings.STATICFILES_LOCATION
+    location = settings.MEDIAFILES_LOCATION
