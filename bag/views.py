@@ -81,8 +81,7 @@ def adjust_bag(request, item_id):
             del bag[item_id]['items_by_size'][size]
             if not bag[item_id]['items_by_size']:
                 bag.pop(item_id)  # Removes the item from the bag
-                messages.success(request, f'Removed size {size.upper()} {
-                    product.name} from your bag')
+                messages.success(request, f'Removed size {size.upper()} {product.name} from your bag')  # noqa: E501
     else:
         if quantity > 0:
             bag[item_id] = quantity
