@@ -38,19 +38,16 @@ def add_to_bag(request, item_id):
             # Otherwise, add the size to the bag
             else:
                 bag[item_id]['items_by_size'][size] = quantity
-                messages.success(request, f'Added size {size.upper()} {
-                    product.name} to your bag')
+                messages.success(request, f'Added size {size.upper()} {product.name} to your bag')  # noqa: E501
         # Otherwise, add the item to the bag
         else:
             bag[item_id] = {'items_by_size': {size: quantity}}
-            messages.success(request, f'Added size {size.upper()} {
-                product.name} to your bag')
+            messages.success(request, f'Added size {size.upper()} {product.name} to your bag')  # noqa: E501
     else:
         # If the item is already in the bag, update the quantity
         if item_id in list(bag.keys()):
             bag[item_id] += quantity
-            messages.success(request, f'Updated {
-                product.name} quantity to {bag[item_id]}')
+            messages.success(request, f'Updated {product.name} quantity to {bag[item_id]}')  # noqa: E501
         # Otherwise, add the item to the bag
         else:
             bag[item_id] = quantity
@@ -89,8 +86,7 @@ def adjust_bag(request, item_id):
     else:
         if quantity > 0:
             bag[item_id] = quantity
-            messages.success(request, f'Updated {
-                product.name} quantity to {bag[item_id]}')
+            messages.success(request, f'Updated {product.name} quantity to {bag[item_id]}')  # noqa: E501
         else:
             bag.pop(item_id)  # Removes the item from the bag
             messages.success(request, f'Removed {product.name} from your bag')
@@ -114,8 +110,7 @@ def remove_from_bag(request, item_id):
             del bag[item_id]['items_by_size'][size]
             if not bag[item_id]['items_by_size']:
                 bag.pop(item_id)
-            messages.success(request, f'Removed size {size.upper()} {
-                    product.name} from your bag')
+            messages.success(request, f'Removed size {size.upper()} {product.name} from your bag')  # noqa: E501
         else:
             # Removes the item from the bag if there is no size
             bag.pop(item_id)

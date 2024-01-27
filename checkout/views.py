@@ -131,8 +131,7 @@ def checkout(request):
                                     args=[order.order_number]))
         # if the form is not valid, we display a message to the user
         else:
-            messages.error(request, 'There was an error with your form. \
-                Please double check your information.')
+            messages.error(request, 'There was an error with your form. Please double check your information.')  # noqa
     else:
         bag = request.session.get('bag', {})
         if not bag:
@@ -170,8 +169,7 @@ def checkout(request):
             order_form = OrderForm()
 
     if not stripe_public_key:
-        messages.warning(request, 'Stripe public key is missing. \
-            Did you forget to set it in your environment?')
+        messages.warning(request, 'Stripe public key is missing. Did you forget to set it in your environment?')  # noqa
 
     template = 'checkout/checkout.html'
     context = {
@@ -215,9 +213,7 @@ def checkout_success(request, order_number):
         if user_profile_form.is_valid():
             user_profile_form.save()
 
-    messages.success(request, f'Order successfully processed! \
-        Your order number is {order_number}. A confirmation \
-        email will be sent to {order.email}.')
+    messages.success(request, f'Order successfully processed! Your order number is {order_number}. A confirmation email will be sent to {order.email}.')  # noqa
 
     # if the user has a bag in the session, we delete it
     if 'bag' in request.session:
